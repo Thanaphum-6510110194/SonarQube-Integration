@@ -3,7 +3,8 @@ pipeline {
 
   tools {
     nodejs 'NodeJS-24.7.0'
-    jdk    'Temurin-17'          // ต้องมีใน Tools จริง ๆ
+    jdk    'Temurin-17'   // ตอนนี้ต้องมีจริง และติดตั้งจาก Adoptium เรียบร้อย
+    // sonarQubeScanner 'SonarScanner-6'  // ถ้าคุณตั้งไว้ใน Tools
   }
 
   stages {
@@ -25,11 +26,13 @@ pipeline {
           withEnv([
             "JAVA_HOME=${tool 'Temurin-17'}",
             "PATH+JAVA=${tool 'Temurin-17'}/bin"
-            // ถ้าเพิ่ม SonarScanner เป็น Tool ด้วย ก็ใส่สองบรรทัดนี้เพิ่ม:
+            // ถ้าเพิ่ม SonarScanner เป็น Tool ด้วย:
             // ,"SCANNER_HOME=${tool 'SonarScanner-6'}",
             // "PATH+SCANNER=${tool 'SonarScanner-6'}/bin"
           ]) {
             sh '''
+              java -version
+
               sonar-scanner \
                 -Dsonar.projectKey=SonarQube-Integration-with-Jenkins \
                 -Dsonar.projectName="SonarQube Integration with Jenkins" \
