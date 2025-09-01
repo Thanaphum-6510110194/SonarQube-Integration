@@ -31,41 +31,28 @@ pipeline {
     }
 
     stage('SonarQube Scan') {
-      steps {
-        withSonarQubeEnv('sonarqube-25.8.0.112029') {
-          // ถ้าคุณเพิ่ม SonarScanner เป็น Tool ไว้ชื่อ SonarScanner-6:
-          withEnv([
-            "JAVA_HOME=${tool 'Temurin-17'}",
-            "PATH+JAVA=${tool 'Temurin-17'}/bin",
-            "SCANNER_HOME=${tool 'SonarScanner-6'}",
-            "PATH+SCANNER=${tool 'SonarScanner-6'}/bin"
-          ]) {
-            sh '''
-              sonar-scanner \
-                -Dsonar.projectKey=SonarQube-Integration-with-Jenkins \
-                -Dsonar.projectName="SonarQube Integration with Jenkins" \
-                -Dsonar.sources=. \
-                -Dsonar.sourceEncoding=UTF-8 \
-                -Dsonar.host.url=$SONAR_HOST_URL \
-                -Dsonar.login=$SONAR_AUTH_TOKEN
-            '''
-          }
+        steps {
+            withSonarQubeEnv('sonarqube-25.8.0.112029') {
+            withEnv([
+                "JAVA_HOME=${tool 'Temurin-17'}",
+                "PATH+JAVA=${tool 'Temurin-17'}/bin"
+            ]) {
+                sh '''
+                java -version
 
-          // ถ้ายังไม่ได้ตั้ง SonarScanner เป็น Tool ก็ใช้ npx เวอร์ชันใหม่ได้ (อย่าลืม JAVA_HOME เป็น 17):
-          // withEnv(["JAVA_HOME=${tool 'Temurin-17'}","PATH+JAVA=${tool 'Temurin-17'}/bin"]) {
-          //   sh '''
-          //     npx -y sonar-scanner@5.0.1 \
-          //       -Dsonar.projectKey=SonarQube-Integration-with-Jenkins \
-          //       -Dsonar.projectName="SonarQube Integration with Jenkins" \
-          //       -Dsonar.sources=. \
-          //       -Dsonar.sourceEncoding=UTF-8 \
-          //       -Dsonar.host.url=$SONAR_HOST_URL \
-          //       -Dsonar.login=$SONAR_AUTH_TOKEN
-          //   '''
-          // }
+                npx -y sonar-scanner@5.0.1 \
+                    -Dsonar.projectKey=SonarQube-Integration-with-Jenkins \
+                    -Dsonar.projectName="SonarQube Integration with Jenkins" \
+                    -Dsonar.sources=. \
+                    -Dsonar.sourceEncoding=UTF-8 \
+                    -Dsonar.host.url="$SONAR_HOST_URL" \
+                    -Dsonar.login="$SONAR_AUTH_TOKEN"
+                '''
+            }
+            }
         }
-      }
     }
+
 
     stage('Quality Gate') {
       steps {
