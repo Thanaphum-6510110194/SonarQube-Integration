@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Thanaphum-6510110194/SonarQube-Integration.git'
+                git branch: 'feature/lab', url: 'https://github.com/Thanaphum-6510110194/SonarQube-Integration.git'
             }
         }
 
