@@ -33,22 +33,15 @@ pipeline {
     stage('SonarQube Scan') {
         steps {
             withSonarQubeEnv('sonarqube-25.8.0.112029') {
-            withEnv([
-                "JAVA_HOME=${tool 'Temurin-17'}",
-                "PATH+JAVA=${tool 'Temurin-17'}/bin"
-            ]) {
-                sh '''
-                java -version
-
-                npx -y sonar-scanner@5.0.1 \
-                    -Dsonar.projectKey=SonarQube-Integration-with-Jenkins \
-                    -Dsonar.projectName="SonarQube Integration with Jenkins" \
-                    -Dsonar.sources=. \
-                    -Dsonar.sourceEncoding=UTF-8 \
-                    -Dsonar.host.url="$SONAR_HOST_URL" \
-                    -Dsonar.login="$SONAR_AUTH_TOKEN"
-                '''
-            }
+            sh '''
+                npx sonarqube-scanner \
+                -Dsonar.projectKey=SonarQube-Integration-with-Jenkins \
+                -Dsonar.projectName="SonarQube Integration with Jenkins" \
+                -Dsonar.sources=. \
+                -Dsonar.sourceEncoding=UTF-8 \
+                -Dsonar.host.url="$SONAR_HOST_URL" \
+                -Dsonar.token="$SONAR_AUTH_TOKEN"
+            '''
             }
         }
     }
