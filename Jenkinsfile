@@ -7,7 +7,7 @@ pipeline {
   }
 
   tools {
-    nodejs 'nodejs-lts'  // ต้องตรงกับ Global Tool Configuration
+    nodejs 'NodeJS-24.7.0'  // ต้องตรงกับ Global Tool Configuration
   }
 
   stages {
