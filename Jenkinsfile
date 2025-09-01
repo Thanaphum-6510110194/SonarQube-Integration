@@ -3,8 +3,7 @@ pipeline {
 
   tools {
     nodejs 'NodeJS-24.7.0'
-    jdk    'Temurin-17'         // <= ต้องมีใน Tools
-    // ถ้าตั้ง SonarScanner เป็น Tool ไว้ด้วย จะดีมาก
+    jdk    'Temurin-17'          // ต้องมีใน Tools จริง ๆ
   }
 
   stages {
@@ -22,12 +21,13 @@ pipeline {
 
     stage('SonarQube Scan') {
       steps {
-        withSonarQubeEnv('sonarqube-25.8.0.112029') { // <= ใช้ชื่อเดียวกับที่ config
+        withSonarQubeEnv('sonarqube-25.8.0.112029') {
           withEnv([
             "JAVA_HOME=${tool 'Temurin-17'}",
-            "PATH+JAVA=${tool 'Temurin-17'}/bin",
-            "SCANNER_HOME=${tool 'SonarScanner-6'}",
-            "PATH+SCANNER=${tool 'SonarScanner-6'}/bin"
+            "PATH+JAVA=${tool 'Temurin-17'}/bin"
+            // ถ้าเพิ่ม SonarScanner เป็น Tool ด้วย ก็ใส่สองบรรทัดนี้เพิ่ม:
+            // ,"SCANNER_HOME=${tool 'SonarScanner-6'}",
+            // "PATH+SCANNER=${tool 'SonarScanner-6'}/bin"
           ]) {
             sh '''
               sonar-scanner \
