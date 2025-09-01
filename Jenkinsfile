@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SONARQUBE = credentials('sonar-token') // ชื่อ Credential ของ Jenkins
-    
+    }
     tools { nodejs 'NodeJS-24.7.0' }
     stages {
         stage('Checkout') {
